@@ -1,0 +1,378 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Facilitation Gym Scenario Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
+<style>
+:root{
+  --ground:#07060F;
+  --panel:#0D0B1C;
+  --line:rgba(184,180,255,.20);
+  --ink:#EDEAFF;
+  --dim:#8E88C4;
+  --group:#FF2E9A;
+  --you:#00E5FF;
+  --impact:#FFC400;
+  --hud:#B7FF3C;
+  --display:'Press Start 2P',ui-monospace,monospace;
+  --body:'VT323',ui-monospace,'Courier New',monospace;
+}
+html{scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  background-image:
+    linear-gradient(rgba(255,46,154,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,.055) 1px,transparent 1px);
+  background-size:44px 44px;
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:22px;
+  line-height:1.35;
+  -webkit-font-smoothing:antialiased;
+}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:99;
+  background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.22) 2px 4px);
+  mix-blend-mode:multiply;opacity:.5}
+.cab{max-width:1180px;margin:0 auto;padding:18px 16px 90px;display:flex;flex-direction:column;gap:34px}
+
+.hud{display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:space-between;align-items:center;
+  border:2px solid var(--you);padding:10px 14px;font-family:var(--display);font-size:10px;
+  letter-spacing:.06em;box-shadow:0 0 14px rgba(0,229,255,.25),inset 0 0 14px rgba(0,229,255,.09)}
+.hud b{color:var(--impact);font-weight:400;font-variant-numeric:tabular-nums}
+.hud .lime{color:var(--hud)}
+.hud .pink{color:var(--group)}
+
+header{text-align:center;display:flex;flex-direction:column;gap:14px;padding-top:8px}
+h1{font-family:var(--display);font-size:clamp(20px,5.2vw,46px);margin:0;line-height:1.35;
+  text-wrap:balance;letter-spacing:.02em}
+h1 .a{color:var(--group);text-shadow:0 0 18px rgba(255,46,154,.65)}
+h1 .b{color:var(--impact);text-shadow:0 0 18px rgba(255,196,0,.55)}
+h1 .dot{color:var(--you)}
+.sub{font-family:var(--display);font-size:clamp(8px,1.7vw,11px);color:var(--hud);margin:0;
+  letter-spacing:.05em;text-shadow:0 0 12px rgba(183,255,60,.5)}
+.lede{margin:0 auto;max-width:60ch;color:var(--dim);font-size:21px}
+
+/* one accent per colour: every tinted panel, card, slot and button reads from these */
+.a-pink {--accent:var(--group); --ink-on:#12000A; --glow:rgba(255,46,154,.16)}
+.a-cyan {--accent:var(--you);   --ink-on:#00131A; --glow:rgba(0,229,255,.16)}
+.a-amber{--accent:var(--impact);--ink-on:#1A1200; --glow:rgba(255,196,0,.16)}
+.a-lime {--accent:var(--hud);   --ink-on:#06110A; --glow:rgba(183,255,60,.14)}
+
+.panel{border:2px solid var(--line);background:var(--panel);position:relative;padding:28px 20px 22px}
+.panel>.cap{position:absolute;top:-11px;left:18px;background:var(--ground);padding:0 10px;
+  font-family:var(--display);font-size:9px;letter-spacing:.08em;color:var(--dim)}
+.panel.tint{border-color:var(--accent);box-shadow:0 0 16px var(--glow)}
+.panel.tint>.cap{color:var(--accent)}
+
+.prompt{font-size:clamp(23px,2.7vw,32px);line-height:1.6;margin:0}
+.slot{color:var(--accent)}
+.slot.empty{color:var(--dim);letter-spacing:.12em}
+.slot.fresh{animation:lightup .5s ease-out both}
+@keyframes lightup{from{opacity:.2;filter:brightness(2)}to{opacity:1;filter:none}}
+
+.deal{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+.card{display:flex;flex-direction:column;gap:12px}
+.card .who{font-family:var(--display);font-size:10px;letter-spacing:.07em;color:var(--accent)}
+.card .stub{color:var(--dim);font-size:19px;margin:0;min-height:26px}
+.card textarea{width:100%;background:transparent;border:0;resize:none;color:var(--ink);
+  font-family:var(--body);font-size:24px;line-height:1.4;height:136px;padding:2px 0;overflow:auto}
+.card textarea:focus{outline:2px solid var(--hud);outline-offset:6px}
+.card textarea::placeholder{color:rgba(142,136,196,.65)}
+.card .btn{margin-top:auto}
+.dealt{animation:deal .42s cubic-bezier(.2,.85,.3,1) both}
+@keyframes deal{
+  from{opacity:0;transform:translateY(-10px);box-shadow:0 0 38px var(--glow),inset 0 0 24px var(--glow)}
+  to{opacity:1;transform:none;box-shadow:0 0 16px var(--glow)}
+}
+
+button{font-family:var(--display);cursor:pointer;background:transparent;color:inherit;
+  border:2px solid currentColor;letter-spacing:.06em;transition:background .12s,box-shadow .12s,color .12s}
+button:focus-visible{outline:3px solid var(--hud);outline-offset:3px}
+.btn{font-size:11px;padding:15px 18px;color:var(--accent)}
+.btn:hover{background:var(--accent);color:var(--ink-on)}
+.btn.big{font-size:clamp(11px,2.1vw,15px);padding:20px 26px}
+.btn.big:hover{box-shadow:0 0 26px rgba(183,255,60,.55)}
+.btn.ghost{color:var(--dim);font-size:10px;padding:13px 15px}
+.btn.ghost:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+.controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:center}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.step{display:flex;flex-direction:column;gap:8px}
+.step .n{font-family:var(--display);font-size:11px;color:var(--impact)}
+.step p{margin:0;color:var(--dim);font-size:21px}
+.channels{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:24px;
+  border-top:2px dashed var(--line);padding-top:20px}
+.ch{display:flex;flex-direction:column;gap:6px}
+.ch .h{font-family:var(--display);font-size:10px;letter-spacing:.06em;color:var(--ink)}
+.ch p{margin:0;color:var(--dim);font-size:20px}
+footer{text-align:center;color:var(--dim);font-size:19px;line-height:1.6;max-width:78ch;margin:0 auto}
+footer a{color:var(--you)}
+
+@media (max-width:880px){
+  .deal,.steps,.channels{grid-template-columns:1fr}
+  .panel{padding:16px 14px}
+  .panel>.cap{position:static;display:block;background:transparent;padding:0;margin:0 0 12px;line-height:1.6}
+  .card textarea{height:auto;min-height:86px;resize:vertical}
+  .card .stub{min-height:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="scan" aria-hidden="true"></div>
+<div class="cab">
+
+  <div class="hud">
+    <span>SCENARIO <b id="hudCount">001</b></span>
+    <span class="pink">DECKS <b id="hudDecks">&mdash;</b></span>
+    <span>COMBINATIONS <b id="hudCombos">&mdash;</b></span>
+    <span class="lime">&#9733; INSERT PRACTICE &#9733;</span>
+  </div>
+
+  <header>
+    <h1><span class="a">SCENARIO</span> <span class="dot">&middot;</span> <span class="b">DESIGNER</span></h1>
+    <p class="sub">&#9658; THE FACILITATION GYM &middot; DRAW 3 CARDS. TRACE ONE IMPACT. &#9668;</p>
+    <p class="lede">Best worked with a partner. Draw a hand, then argue about what it actually does &mdash; to them, or to you.</p>
+  </header>
+
+  <section class="panel tint a-lime">
+    <span class="cap">&#9733; THE SCENARIO &#9733;</span>
+    <p class="prompt" aria-live="polite">When <span class="slot a-pink empty" id="sg">[ ? ? ? ]</span>, and you <span class="slot a-cyan empty" id="sf">[ ? ? ? ]</span>, trace the impact on <span class="slot a-amber empty" id="si">[ ? ? ? ]</span>.</p>
+  </section>
+
+  <section class="deal">
+    <div class="panel tint a-pink card">
+      <span class="cap">CARD 1</span>
+      <span class="who">THE GROUP</span>
+      <p class="stub">When&hellip;</p>
+      <textarea id="txtG" rows="3" aria-label="What the group does" placeholder="Draw, or write what you saw the group do."></textarea>
+      <button class="btn" id="rollG" aria-label="Draw a group card">&#9654; DRAW</button>
+    </div>
+
+    <div class="panel tint a-cyan card">
+      <span class="cap">CARD 2</span>
+      <span class="who">THE FACILITATOR</span>
+      <p class="stub">and you&hellip;</p>
+      <textarea id="txtF" rows="3" aria-label="What the facilitator does" placeholder="Draw, or write the move you made."></textarea>
+      <button class="btn" id="rollF" aria-label="Draw a facilitator card">&#9654; DRAW</button>
+    </div>
+
+    <div class="panel tint a-amber card">
+      <span class="cap">CARD 3</span>
+      <span class="who">THE IMPACT</span>
+      <p class="stub">trace the impact on&hellip;</p>
+      <textarea id="txtI" rows="3" aria-label="Which impact to trace" placeholder="Draw, or name the impact you want to look at."></textarea>
+      <button class="btn" id="rollI" aria-label="Draw an impact card">&#9654; DRAW</button>
+    </div>
+  </section>
+
+  <section class="controls">
+    <button class="btn big a-lime" id="rollAll">&#9654;&#9654; DRAW ALL THREE &nbsp;[G]</button>
+    <button class="btn ghost" id="clear">&#10005; CLEAR</button>
+  </section>
+
+  <section class="panel">
+    <span class="cap">&#9733; THE EXERCISE &#9733;</span>
+    <div class="steps">
+      <div class="step"><span class="n">1 &#9658; CONVERSATION</span><p>Talk the hand through before you write anything down. What would you actually see, hear and feel in that room? Disagreement about that is the exercise.</p></div>
+      <div class="step"><span class="n">2 &#9658; JOURNEY</span><p>Keep the first two cards and draw a new impact three times. Same moment, three places to look. Then keep the group card and re-draw the move instead.</p></div>
+      <div class="step"><span class="n">3 &#9658; REFLECTION</span><p>Ask it twice: how does this land in the room, and how does it read two weeks later? A move that scores well now and thin later is worth a second look.</p></div>
+    </div>
+    <div class="channels">
+      <div class="ch"><span class="h">&#9670; HEAD</span><p>Cognitive. Thoughts, beliefs, the rule they infer about what is allowed here. Limiting or enabling.</p></div>
+      <div class="ch"><span class="h">&#9650; HEART</span><p>Affective. Feelings, and their price. Confidence, calm and readiness give energy back; worry, fear and watchfulness cost more than they give.</p></div>
+      <div class="ch"><span class="h">&#9679; HANDS</span><p>Behavioural. What they do next and what they stop doing. Speak or wait, look away, avoid the group, avoid naming the thing.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>The Facilitation Gym &mdash; eleven facilitation muscles, in development. The group and facilitator decks are drawn from the Gym's scenario cards; the impact deck crosses two subjects, the group and you, with three channels.</p>
+    <p>Arcade form gratefully borrowed from <a href="https://future-tinkering-game-shakers.lovable.app/">Future Tinkering</a> by the L&amp;D Shakers (Nina, Sara, Eugenia, Ariel).</p>
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+/* CARD 1 - the group. Observable, reads after "When ...".
+   Muscle in the trailing comment, deliberately not shown on the card. */
+const GROUP = [
+ "two people carry the conversation and three have not spoken",              // LEAD
+ "the group agrees warmly with everything, at no cost to anyone",            // CHALLENGE
+ "nobody answers for forty seconds",                                          // HOLD
+ "one person stops writing and two chairs move slightly apart",              // SENSE
+ "someone asks halfway through what this is actually for",                   // FRAME
+ "they check with you before every obvious next step",                       // SUPPORT
+ "a group has been stuck for six minutes and has not asked",                 // SUPPORT
+ "two participants open a real conflict and the room goes still",            // HOLD
+ "someone says they do not do games",                                        // FRAME
+ "they keep circling back to a topic that is not on the plan",               // SENSE
+ "they ask for ten more minutes on something that is working",               // ADAPT
+ "they have six decent threads and want to keep all six",                    // DECIDE
+ "the first three ideas are safe and small",                                 // ENCOURAGE
+ "one person speaks first every round and the others now wait",              // LEAD
+ "the activity fails and several people are embarrassed",                    // DISCOVER
+ "they blame the rules for their result, accurately",                        // CHALLENGE
+ "someone asks you what the right answer would have been",                   // DISCOVER
+ "everyone said it was clear and two groups are doing something else",       // FRAME
+ "someone says, upset, that your set-up was the problem",                    // HOLD
+ "someone says something confidently wrong and nobody objects",              // CHALLENGE
+ "the room goes quiet and you cannot tell thinking from finished",           // SENSE
+ "laughter arrives late, and always after the same person",                  // SENSE
+ "someone offers an idea that will not work",                                // ENCOURAGE
+ "they reopen a decision you closed twenty minutes ago",                     // DECIDE
+ "everyone is writing, nobody is looking up",                                // ANTICIPATE
+ "they look at you every time two of them disagree",                         // LEAD
+ "someone volunteers a failure and the room goes awkward",                   // ENCOURAGE
+ "phones come out, quietly and all at once",                                 // SENSE
+ "they finish ten minutes early and say it was fine",                        // CHALLENGE
+ "two people talk over each other and neither backs down",                   // LEAD
+ "they move fast toward a topic you did not design for",                     // ADAPT
+ "nobody touches the material you prepared most carefully",                  // ANTICIPATE
+ "one person answers every question within two seconds"                      // HOLD
+];
+
+/* CARD 2 - the facilitator. Reads after "and you ...".
+   Trained and shadow moves are mixed on purpose and not labelled. */
+const FACIL = [
+ "fill the silence at four seconds",                                         // HOLD, shadow
+ "wait, hands still, for eight seconds",                                     // HOLD, trained
+ "name what you see without interpreting it",                                // SENSE, trained
+ "name what you see and add why you think it happened",                      // SENSE, shadow
+ "give the hint before anyone asks for it",                                  // SUPPORT, shadow
+ "ask what they have already tried, then step back",                         // SUPPORT, trained
+ "restate their point more crisply than they said it",                       // FRAME, shadow
+ "write their exact words up, including the awkward one",                    // FRAME, trained
+ "decide it yourself and say why, out loud",                                 // DECIDE, trained
+ "leave the decision open and move on",                                      // DECIDE, shadow
+ "change the plan without saying it changed",                                // ADAPT, shadow
+ "say what changes and what stays, before changing it",                      // ADAPT, trained
+ "ask the quietest third to write first, then read out",                     // ENCOURAGE, trained
+ "thank them and move briskly to the next idea",                             // ENCOURAGE, shadow
+ "tell a failure of your own",                                               // ENCOURAGE, trained
+ "step between the two of them and smooth it",                               // HOLD, shadow
+ "say the room has gone still, then wait in it",                             // HOLD, trained
+ "ask what makes them sure, kindly",                                         // CHALLENGE, trained
+ "correct the wrong statement yourself",                                     // CHALLENGE, shadow
+ "ask a question you cannot answer yourself",                                // DISCOVER, trained
+ "answer their question fully and well",                                     // DISCOVER, shadow
+ "hand the timekeeping over and leave it there",                             // LEAD, trained
+ "quietly take back a task you had given away",                              // LEAD, shadow
+ "explain the purpose again, at length",                                     // FRAME, shadow
+ "ask three people what they think this is for",                             // FRAME, trained
+ "keep a contingency ready and do not mention it",                           // ANTICIPATE, trained
+ "warn them about a difficulty that has not happened",                       // ANTICIPATE, shadow
+ "check your phone while someone is speaking",                               // SENSE, shadow
+ "move away from the group and let them work",                               // SUPPORT, trained
+ "finish someone's sentence for them",                                       // SUPPORT, shadow
+ "say you do not know, and stop there",                                      // DISCOVER, trained
+ "look at the person who agrees with you",                                   // SENSE, shadow
+ "put the awkward sentence in your first ten words",                         // CHALLENGE, trained
+ "ask what else is true, early",                                             // DISCOVER, trained
+ "add one more instruction to a clear task"                                  // FRAME, shadow
+];
+
+/* CARD 3 - the impact. Reads after "trace the impact on ...".
+   Two subjects, three channels, five each. */
+const IMPACT = [
+ "what the group now believes is allowed here",                              // group, head
+ "the rule they infer about who does the thinking",                          // group, head
+ "the story the quiet ones tell themselves",                                 // group, head
+ "whether they expect their words to survive your summary",                  // group, head
+ "the limiting belief this hardens or cracks",                               // group, head
+
+ "how much energy they spend reading your face",                             // group, heart
+ "whether the room feels safer, or only more comfortable",                   // group, heart
+ "the confidence of whoever just took a risk",                               // group, heart
+ "what they are relieved about",                                             // group, heart
+ "their energy after the next break",                                        // group, heart
+
+ "what they do next without being asked",                                    // group, hands
+ "who speaks next, and who stops trying",                                    // group, hands
+ "whether the next question goes to each other or to you",                   // group, hands
+ "what they stop doing for the rest of the day",                             // group, hands
+ "what they do differently on the Tuesday after",                            // group, hands
+
+ "the story you now tell yourself about this group",                         // you, head
+ "whether you still believe they can carry this",                            // you, head
+ "what you have decided the discomfort means",                               // you, head
+ "the belief about your role that this confirms",                            // you, head
+ "what you would have to admit if this went badly",                          // you, head
+
+ "the relief you feel, and what you bought it with",                         // you, heart
+ "how much you need this to go well",                                        // you, heart
+ "whether you are steadier, or only busier",                                 // you, heart
+ "the anxiety this move was designed to reduce",                             // you, heart
+ "what it costs you to hold this another twenty minutes",                    // you, heart
+
+ "how much you talk in the next twenty minutes",                             // you, hands
+ "what you avoid naming for the rest of the day",                            // you, hands
+ "the next thing you take back, or hand over",                               // you, hands
+ "whether you step in sooner next time, or later",                           // you, hands
+ "what you write down afterwards, and what you leave out"                    // you, hands
+];
+
+const $ = s => document.querySelector(s);
+
+/* One row per deck: the cards, the box you edit, the slot it fills in the sentence,
+   and its DRAW button. Adding a fourth deck means adding a row. */
+const DECKS = [
+ [GROUP,  "#txtG", "#sg", "#rollG"],
+ [FACIL,  "#txtF", "#sf", "#rollF"],
+ [IMPACT, "#txtI", "#si", "#rollI"]
+].map(([deck, txt, slot, btn]) => ({
+  deck, last: -1,
+  input: $(txt), out: $(slot), btn: $(btn), card: $(txt).closest(".card")
+}));
+
+let scenario = 0;
+
+function replay(node, cls){
+  node.classList.remove(cls);
+  void node.offsetWidth;
+  node.classList.add(cls);
+}
+function drawOne(d){
+  let x;
+  do { x = Math.floor(Math.random() * d.deck.length); } while(x === d.last && d.deck.length > 1);
+  d.last = x;
+  d.input.value = d.deck[x];
+  replay(d.card, "dealt");
+}
+function render(){
+  DECKS.forEach(d => {
+    const text = d.input.value.trim();
+    d.out.textContent = text || "[ ? ? ? ]";
+    d.out.classList.toggle("empty", !text);
+  });
+  $("#hudCount").textContent = String(scenario).padStart(3, "0");
+}
+function deal(cards){
+  cards.forEach(drawOne);
+  scenario++;
+  render();
+  cards.forEach(d => replay(d.out, "fresh"));
+}
+
+DECKS.forEach(d => {
+  d.btn.addEventListener("click", () => deal([d]));
+  d.input.addEventListener("input", render);
+});
+$("#rollAll").addEventListener("click", () => deal(DECKS));
+$("#clear").addEventListener("click", () => {
+  DECKS.forEach(d => { d.input.value = ""; });
+  render();
+});
+document.addEventListener("keydown", e => {
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  if(e.target instanceof Element && e.target.closest("textarea,input")) return;
+  if(e.key.toLowerCase() === "g"){ e.preventDefault(); deal(DECKS); }
+});
+
+$("#hudDecks").textContent = DECKS.map(d => d.deck.length).join("\u00d7");
+$("#hudCombos").textContent = DECKS.reduce((n, d) => n * d.deck.length, 1).toLocaleString("en-US");
+
+deal(DECKS);
+</script>
