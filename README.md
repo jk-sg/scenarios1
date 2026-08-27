@@ -6,8 +6,8 @@ Draw three cards and read the hand as one sentence:
 
 > When **[the group]**, and you **[the facilitator]**, trace the impact on **[the impact]**.
 
-Draw each card on its own or all three at once. 33 group behaviours × 35 facilitator moves ×
-30 impacts = 34,650 hands. Any card can be overwritten by typing into it, so you can drop in a
+Draw each card on its own or all three at once. 47 group behaviours × 64 facilitator moves ×
+30 impacts = 90,240 hands. Any card can be overwritten by typing into it, so you can drop in a
 moment you actually had and let the other cards do the work.
 
 ## How to work it

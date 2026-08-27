@@ -220,7 +220,7 @@ const GROUP = [
  "someone says, upset, that your set-up was the problem",                    // HOLD
  "someone says something confidently wrong and nobody objects",              // CHALLENGE
  "the room goes quiet and you cannot tell thinking from finished",           // SENSE
- "laughter arrives late, and always after the same person",                  // SENSE
+ "laughter arrives late, always after the same person",                  // SENSE
  "someone offers an idea that will not work",                                // ENCOURAGE
  "they reopen a decision you closed twenty minutes ago",                     // DECIDE
  "everyone is writing, nobody is looking up",                                // ANTICIPATE
@@ -231,7 +231,23 @@ const GROUP = [
  "two people talk over each other and neither backs down",                   // LEAD
  "they move fast toward a topic you did not design for",                     // ADAPT
  "nobody touches the material you prepared most carefully",                  // ANTICIPATE
- "one person answers every question within two seconds"                      // HOLD
+ "one person answers every question within two seconds",                     // HOLD
+ /* Added 2026-08-27 from the podcast-evidence pass over 54 episodes.
+    Episode numbers only: practitioner names in that source are unverified against audio. */
+ "they spend the first minutes securing the room, not starting",     // ANTICIPATE, ep 30
+ "they tidy the workspace instead of changing the work",             // DECIDE, ep 33
+ "the fastest ones cannot explain how they did it",                  // FRAME, ep 12
+ "everyone puts something back the way it was",                      // DISCOVER, ep 13
+ "they all say yes while one of them looks away",                    // CHALLENGE, ep 12
+ "the ones furthest from the middle have stopped contributing",      // LEAD, ep 12
+ "someone asks whether they are allowed to break it",                // ENCOURAGE, ep 17
+ "they optimise inside the rules and never test one",                // CHALLENGE, ep 8
+ "the quietest person's idea is repeated later by someone else",     // LEAD, ep 12
+ "the round ends and nothing is finished",                           // HOLD, ep 7
+ "one person has held the same role for three rounds",               // SUPPORT, ep 49
+ "they ask for a glossary instead of an example",                    // FRAME, ep 44
+ "the person who normally decides has said nothing for ten minutes", // LEAD, ep 43
+ "two of them speed up and stop talking to each other"               // SENSE, ep 40
 ];
 
 /* CARD 2 - the facilitator. Reads after "and you ...".
@@ -271,7 +287,38 @@ const FACIL = [
  "look at the person who agrees with you",                                   // SENSE, shadow
  "put the awkward sentence in your first ten words",                         // CHALLENGE, trained
  "ask what else is true, early",                                             // DISCOVER, trained
- "add one more instruction to a clear task"                                  // FRAME, shadow
+ "add one more instruction to a clear task",                                 // FRAME, shadow
+ /* Added 2026-08-27 from the podcast-evidence pass, weighted to the five muscles
+    the deck was thinnest on: SUPPORT, ANTICIPATE, DECIDE, LEAD, CHALLENGE. */
+ "extend the reflection because they seem to need it",                                            // SUPPORT, shadow, ep 8
+ "re-read the rule, stressing one word",                                                          // SUPPORT, trained, ep 33
+ "wait until they ask, then answer only that",                                                    // SUPPORT, trained, ep 53
+ "carry the awkward part of the task yourself",                                                   // SUPPORT, shadow, ep 8
+ "put the stuck one in a named observer role",                                                    // SUPPORT, trained, ep 22
+ "keep the override in your pocket, unused",                                                      // ANTICIPATE, trained, ep 17
+ "set a time per task and a hint for when it overruns",                                           // ANTICIPATE, trained, ep 17
+ "plan the next minute while they are still in this one",                                         // ANTICIPATE, shadow, ep 25
+ "remove the difficulty you built, before they reach it",                                         // ANTICIPATE, shadow, ep 33
+ "say how this closes, before it opens",                                                          // DECIDE, trained, ep 53
+ "ask the ones who did not vote if they can move on",                                             // DECIDE, trained, ep 45
+ "run the vote you already know the answer to",                                                   // DECIDE, shadow, ep 45
+ "let the loudest preference stand as the group's",                                               // DECIDE, shadow, ep 15
+ "allow exactly one change, and hold that line",                                                  // DECIDE, trained, ep 33
+ "say which hat you are wearing, out loud",                                                       // LEAD, trained, ep 7
+ "leave the room for ten minutes",                                                                // LEAD, trained, ep 43
+ "answer the question that was asked to the group",                                               // LEAD, shadow, ep 12
+ "fill the pause with your own voice, again",                                                     // LEAD, shadow, ep 12
+ "ask them to show you, not tell you",                                                            // CHALLENGE, trained, ep 12
+ "make it a team task the moment one person is exposed",                                          // CHALLENGE, trained, ep 12
+ "point at the arithmetic and let them read it",                                                  // CHALLENGE, trained, ep 53
+ "soften the question until it asks nothing",                                                     // CHALLENGE, shadow, ep 12
+ "ask what makes them sure, knowing they are wrong",                                              // CHALLENGE, shadow
+ "tell them what they should have learned",                                                       // FRAME, shadow, ep 35
+ "say the debrief question before the game starts",                                               // FRAME, trained, ep 14
+ "model the strangest version yourself, first",                                                   // ENCOURAGE, trained, ep 49
+ "take the break you need before deciding what is next",                                          // ADAPT, trained, ep 3
+ "let it fail completely, then stop",                                                             // HOLD, trained, ep 16
+ "ask what stayed with them, before asking about the topic"                                       // DISCOVER, trained, ep 27
 ];
 
 /* CARD 3 - the impact. Reads after "trace the impact on ...".
