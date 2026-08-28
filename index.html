@@ -44,6 +44,9 @@ body{
 .hud b{color:var(--impact);font-weight:400;font-variant-numeric:tabular-nums}
 .hud .lime{color:var(--hud)}
 .hud .pink{color:var(--group)}
+.hud .amber{color:var(--impact)}
+#muscleNote{color:var(--ink);max-width:66ch}
+#muscleNote b{color:var(--impact);font-family:var(--display);font-size:12px;letter-spacing:.05em}
 
 header{text-align:center;display:flex;flex-direction:column;gap:14px;padding-top:8px}
 h1{font-family:var(--display);font-size:clamp(20px,5.2vw,46px);margin:0;line-height:1.35;
@@ -128,6 +131,7 @@ footer a{color:var(--you)}
     <span>SCENARIO <b id="hudCount">001</b></span>
     <span class="pink">DECKS <b id="hudDecks">&mdash;</b></span>
     <span>COMBINATIONS <b id="hudCombos">&mdash;</b></span>
+    <span class="amber" id="hudMuscle" hidden>MUSCLE <b id="hudMuscleName">&mdash;</b></span>
     <span class="lime">&#9733; INSERT PRACTICE &#9733;</span>
   </div>
 
@@ -135,6 +139,7 @@ footer a{color:var(--you)}
     <h1><span class="a">SCENARIO</span> <span class="dot">&middot;</span> <span class="b">DESIGNER</span></h1>
     <p class="sub">&#9658; THE FACILITATION GYM &middot; DRAW 3 CARDS. TRACE ONE IMPACT. &#9668;</p>
     <p class="lede">Best worked with a partner. Draw a hand, then argue about what it actually does &mdash; to them, or to you.</p>
+  <p class="lede" id="muscleNote" hidden></p>
   </header>
 
   <section class="panel tint a-lime">
@@ -199,126 +204,126 @@ footer a{color:var(--you)}
 /* CARD 1 - the group. Observable, reads after "When ...".
    Muscle in the trailing comment, deliberately not shown on the card. */
 const GROUP = [
- "two people carry the conversation and three have not spoken",              // LEAD
- "the group agrees warmly with everything, at no cost to anyone",            // CHALLENGE
- "nobody answers for forty seconds",                                          // HOLD
- "one person stops writing and two chairs move slightly apart",              // SENSE
- "someone asks halfway through what this is actually for",                   // FRAME
- "they check with you before every obvious next step",                       // SUPPORT
- "a group has been stuck for six minutes and has not asked",                 // SUPPORT
- "two participants open a real conflict and the room goes still",            // HOLD
- "someone says they do not do games",                                        // FRAME
- "they keep circling back to a topic that is not on the plan",               // SENSE
- "they ask for ten more minutes on something that is working",               // ADAPT
- "they have six decent threads and want to keep all six",                    // DECIDE
- "the first three ideas are safe and small",                                 // ENCOURAGE
- "one person speaks first every round and the others now wait",              // LEAD
- "the activity fails and several people are embarrassed",                    // DISCOVER
- "they blame the rules for their result, accurately",                        // CHALLENGE
- "someone asks you what the right answer would have been",                   // DISCOVER
- "everyone said it was clear and two groups are doing something else",       // FRAME
- "someone says, upset, that your set-up was the problem",                    // HOLD
- "someone says something confidently wrong and nobody objects",              // CHALLENGE
- "the room goes quiet and you cannot tell thinking from finished",           // SENSE
- "laughter arrives late, always after the same person",                  // SENSE
- "someone offers an idea that will not work",                                // ENCOURAGE
- "they reopen a decision you closed twenty minutes ago",                     // DECIDE
- "everyone is writing, nobody is looking up",                                // ANTICIPATE
- "they look at you every time two of them disagree",                         // LEAD
- "someone volunteers a failure and the room goes awkward",                   // ENCOURAGE
- "phones come out, quietly and all at once",                                 // SENSE
- "they finish ten minutes early and say it was fine",                        // CHALLENGE
- "two people talk over each other and neither backs down",                   // LEAD
- "they move fast toward a topic you did not design for",                     // ADAPT
- "nobody touches the material you prepared most carefully",                  // ANTICIPATE
- "one person answers every question within two seconds",                     // HOLD
+ ["two people carry the conversation and three have not spoken", "LEAD"],
+ ["the group agrees warmly with everything, at no cost to anyone", "CHALLENGE"],
+ ["nobody answers for forty seconds", "HOLD"],
+ ["one person stops writing and two chairs move slightly apart", "SENSE"],
+ ["someone asks halfway through what this is actually for", "FRAME"],
+ ["they check with you before every obvious next step", "SUPPORT"],
+ ["a group has been stuck for six minutes and has not asked", "SUPPORT"],
+ ["two participants open a real conflict and the room goes still", "HOLD"],
+ ["someone says they do not do games", "FRAME"],
+ ["they keep circling back to a topic that is not on the plan", "SENSE"],
+ ["they ask for ten more minutes on something that is working", "ADAPT"],
+ ["they have six decent threads and want to keep all six", "DECIDE"],
+ ["the first three ideas are safe and small", "ENCOURAGE"],
+ ["one person speaks first every round and the others now wait", "LEAD"],
+ ["the activity fails and several people are embarrassed", "DISCOVER"],
+ ["they blame the rules for their result, accurately", "CHALLENGE"],
+ ["someone asks you what the right answer would have been", "DISCOVER"],
+ ["everyone said it was clear and two groups are doing something else", "FRAME"],
+ ["someone says, upset, that your set-up was the problem", "HOLD"],
+ ["someone says something confidently wrong and nobody objects", "CHALLENGE"],
+ ["the room goes quiet and you cannot tell thinking from finished", "SENSE"],
+ ["laughter arrives late, always after the same person", "SENSE"],
+ ["someone offers an idea that will not work", "ENCOURAGE"],
+ ["they reopen a decision you closed twenty minutes ago", "DECIDE"],
+ ["everyone is writing, nobody is looking up", "ANTICIPATE"],
+ ["they look at you every time two of them disagree", "LEAD"],
+ ["someone volunteers a failure and the room goes awkward", "ENCOURAGE"],
+ ["phones come out, quietly and all at once", "SENSE"],
+ ["they finish ten minutes early and say it was fine", "CHALLENGE"],
+ ["two people talk over each other and neither backs down", "LEAD"],
+ ["they move fast toward a topic you did not design for", "ADAPT"],
+ ["nobody touches the material you prepared most carefully", "ANTICIPATE"],
+ ["one person answers every question within two seconds", "HOLD"],
  /* Added 2026-08-27 from the podcast-evidence pass over 54 episodes.
     Episode numbers only: practitioner names in that source are unverified against audio. */
- "they spend the first minutes securing the room, not starting",     // ANTICIPATE, ep 30
- "they tidy the workspace instead of changing the work",             // DECIDE, ep 33
- "the fastest ones cannot explain how they did it",                  // FRAME, ep 12
- "everyone puts something back the way it was",                      // DISCOVER, ep 13
- "they all say yes while one of them looks away",                    // CHALLENGE, ep 12
- "the ones furthest from the middle have stopped contributing",      // LEAD, ep 12
- "someone asks whether they are allowed to break it",                // ENCOURAGE, ep 17
- "they optimise inside the rules and never test one",                // CHALLENGE, ep 8
- "the quietest person's idea is repeated later by someone else",     // LEAD, ep 12
- "the round ends and nothing is finished",                           // HOLD, ep 7
- "one person has held the same role for three rounds",               // SUPPORT, ep 49
- "they ask for a glossary instead of an example",                    // FRAME, ep 44
- "the person who normally decides has said nothing for ten minutes", // LEAD, ep 43
- "two of them speed up and stop talking to each other"               // SENSE, ep 40
+ ["they spend the first minutes securing the room, not starting", "ANTICIPATE"],  // ep 30
+ ["they tidy the workspace instead of changing the work", "DECIDE"],  // ep 33
+ ["the fastest ones cannot explain how they did it", "FRAME"],  // ep 12
+ ["everyone puts something back the way it was", "DISCOVER"],  // ep 13
+ ["they all say yes while one of them looks away", "CHALLENGE"],  // ep 12
+ ["the ones furthest from the middle have stopped contributing", "LEAD"],  // ep 12
+ ["someone asks whether they are allowed to break it", "ENCOURAGE"],  // ep 17
+ ["they optimise inside the rules and never test one", "CHALLENGE"],  // ep 8
+ ["the quietest person's idea is repeated later by someone else", "LEAD"],  // ep 12
+ ["the round ends and nothing is finished", "HOLD"],  // ep 7
+ ["one person has held the same role for three rounds", "SUPPORT"],  // ep 49
+ ["they ask for a glossary instead of an example", "FRAME"],  // ep 44
+ ["the person who normally decides has said nothing for ten minutes", "LEAD"],  // ep 43
+ ["two of them speed up and stop talking to each other", "SENSE"],  // ep 40
 ];
 
 /* CARD 2 - the facilitator. Reads after "and you ...".
    Trained and shadow moves are mixed on purpose and not labelled. */
 const FACIL = [
- "fill the silence at four seconds",                                         // HOLD, shadow
- "wait, hands still, for eight seconds",                                     // HOLD, trained
- "name what you see without interpreting it",                                // SENSE, trained
- "name what you see and add why you think it happened",                      // SENSE, shadow
- "give the hint before anyone asks for it",                                  // SUPPORT, shadow
- "ask what they have already tried, then step back",                         // SUPPORT, trained
- "restate their point more crisply than they said it",                       // FRAME, shadow
- "write their exact words up, including the awkward one",                    // FRAME, trained
- "decide it yourself and say why, out loud",                                 // DECIDE, trained
- "leave the decision open and move on",                                      // DECIDE, shadow
- "change the plan without saying it changed",                                // ADAPT, shadow
- "say what changes and what stays, before changing it",                      // ADAPT, trained
- "ask the quietest third to write first, then read out",                     // ENCOURAGE, trained
- "thank them and move briskly to the next idea",                             // ENCOURAGE, shadow
- "tell a failure of your own",                                               // ENCOURAGE, trained
- "step between the two of them and smooth it",                               // HOLD, shadow
- "say the room has gone still, then wait in it",                             // HOLD, trained
- "ask what makes them sure, kindly",                                         // CHALLENGE, trained
- "correct the wrong statement yourself",                                     // CHALLENGE, shadow
- "ask a question you cannot answer yourself",                                // DISCOVER, trained
- "answer their question fully and well",                                     // DISCOVER, shadow
- "hand the timekeeping over and leave it there",                             // LEAD, trained
- "quietly take back a task you had given away",                              // LEAD, shadow
- "explain the purpose again, at length",                                     // FRAME, shadow
- "ask three people what they think this is for",                             // FRAME, trained
- "keep a contingency ready and do not mention it",                           // ANTICIPATE, trained
- "warn them about a difficulty that has not happened",                       // ANTICIPATE, shadow
- "check your phone while someone is speaking",                               // SENSE, shadow
- "move away from the group and let them work",                               // SUPPORT, trained
- "finish someone's sentence for them",                                       // SUPPORT, shadow
- "say you do not know, and stop there",                                      // DISCOVER, trained
- "look at the person who agrees with you",                                   // SENSE, shadow
- "put the awkward sentence in your first ten words",                         // CHALLENGE, trained
- "ask what else is true, early",                                             // DISCOVER, trained
- "add one more instruction to a clear task",                                 // FRAME, shadow
+ ["fill the silence at four seconds", "HOLD"],  // shadow
+ ["wait, hands still, for eight seconds", "HOLD"],  // trained
+ ["name what you see without interpreting it", "SENSE"],  // trained
+ ["name what you see and add why you think it happened", "SENSE"],  // shadow
+ ["give the hint before anyone asks for it", "SUPPORT"],  // shadow
+ ["ask what they have already tried, then step back", "SUPPORT"],  // trained
+ ["restate their point more crisply than they said it", "FRAME"],  // shadow
+ ["write their exact words up, including the awkward one", "FRAME"],  // trained
+ ["decide it yourself and say why, out loud", "DECIDE"],  // trained
+ ["leave the decision open and move on", "DECIDE"],  // shadow
+ ["change the plan without saying it changed", "ADAPT"],  // shadow
+ ["say what changes and what stays, before changing it", "ADAPT"],  // trained
+ ["ask the quietest third to write first, then read out", "ENCOURAGE"],  // trained
+ ["thank them and move briskly to the next idea", "ENCOURAGE"],  // shadow
+ ["tell a failure of your own", "ENCOURAGE"],  // trained
+ ["step between the two of them and smooth it", "HOLD"],  // shadow
+ ["say the room has gone still, then wait in it", "HOLD"],  // trained
+ ["ask what makes them sure, kindly", "CHALLENGE"],  // trained
+ ["correct the wrong statement yourself", "CHALLENGE"],  // shadow
+ ["ask a question you cannot answer yourself", "DISCOVER"],  // trained
+ ["answer their question fully and well", "DISCOVER"],  // shadow
+ ["hand the timekeeping over and leave it there", "LEAD"],  // trained
+ ["quietly take back a task you had given away", "LEAD"],  // shadow
+ ["explain the purpose again, at length", "FRAME"],  // shadow
+ ["ask three people what they think this is for", "FRAME"],  // trained
+ ["keep a contingency ready and do not mention it", "ANTICIPATE"],  // trained
+ ["warn them about a difficulty that has not happened", "ANTICIPATE"],  // shadow
+ ["check your phone while someone is speaking", "SENSE"],  // shadow
+ ["move away from the group and let them work", "SUPPORT"],  // trained
+ ["finish someone's sentence for them", "SUPPORT"],  // shadow
+ ["say you do not know, and stop there", "DISCOVER"],  // trained
+ ["look at the person who agrees with you", "SENSE"],  // shadow
+ ["put the awkward sentence in your first ten words", "CHALLENGE"],  // trained
+ ["ask what else is true, early", "DISCOVER"],  // trained
+ ["add one more instruction to a clear task", "FRAME"],  // shadow
  /* Added 2026-08-27 from the podcast-evidence pass, weighted to the five muscles
     the deck was thinnest on: SUPPORT, ANTICIPATE, DECIDE, LEAD, CHALLENGE. */
- "extend the reflection because they seem to need it",                                            // SUPPORT, shadow, ep 8
- "re-read the rule, stressing one word",                                                          // SUPPORT, trained, ep 33
- "wait until they ask, then answer only that",                                                    // SUPPORT, trained, ep 53
- "carry the awkward part of the task yourself",                                                   // SUPPORT, shadow, ep 8
- "put the stuck one in a named observer role",                                                    // SUPPORT, trained, ep 22
- "keep the override in your pocket, unused",                                                      // ANTICIPATE, trained, ep 17
- "set a time per task and a hint for when it overruns",                                           // ANTICIPATE, trained, ep 17
- "plan the next minute while they are still in this one",                                         // ANTICIPATE, shadow, ep 25
- "remove the difficulty you built, before they reach it",                                         // ANTICIPATE, shadow, ep 33
- "say how this closes, before it opens",                                                          // DECIDE, trained, ep 53
- "ask the ones who did not vote if they can move on",                                             // DECIDE, trained, ep 45
- "run the vote you already know the answer to",                                                   // DECIDE, shadow, ep 45
- "let the loudest preference stand as the group's",                                               // DECIDE, shadow, ep 15
- "allow exactly one change, and hold that line",                                                  // DECIDE, trained, ep 33
- "say which hat you are wearing, out loud",                                                       // LEAD, trained, ep 7
- "leave the room for ten minutes",                                                                // LEAD, trained, ep 43
- "answer the question that was asked to the group",                                               // LEAD, shadow, ep 12
- "fill the pause with your own voice, again",                                                     // LEAD, shadow, ep 12
- "ask them to show you, not tell you",                                                            // CHALLENGE, trained, ep 12
- "make it a team task the moment one person is exposed",                                          // CHALLENGE, trained, ep 12
- "point at the arithmetic and let them read it",                                                  // CHALLENGE, trained, ep 53
- "soften the question until it asks nothing",                                                     // CHALLENGE, shadow, ep 12
- "ask what makes them sure, knowing they are wrong",                                              // CHALLENGE, shadow
- "tell them what they should have learned",                                                       // FRAME, shadow, ep 35
- "say the debrief question before the game starts",                                               // FRAME, trained, ep 14
- "model the strangest version yourself, first",                                                   // ENCOURAGE, trained, ep 49
- "take the break you need before deciding what is next",                                          // ADAPT, trained, ep 3
- "let it fail completely, then stop",                                                             // HOLD, trained, ep 16
- "ask what stayed with them, before asking about the topic"                                       // DISCOVER, trained, ep 27
+ ["extend the reflection because they seem to need it", "SUPPORT"],  // shadow, ep 8
+ ["re-read the rule, stressing one word", "SUPPORT"],  // trained, ep 33
+ ["wait until they ask, then answer only that", "SUPPORT"],  // trained, ep 53
+ ["carry the awkward part of the task yourself", "SUPPORT"],  // shadow, ep 8
+ ["put the stuck one in a named observer role", "SUPPORT"],  // trained, ep 22
+ ["keep the override in your pocket, unused", "ANTICIPATE"],  // trained, ep 17
+ ["set a time per task and a hint for when it overruns", "ANTICIPATE"],  // trained, ep 17
+ ["plan the next minute while they are still in this one", "ANTICIPATE"],  // shadow, ep 25
+ ["remove the difficulty you built, before they reach it", "ANTICIPATE"],  // shadow, ep 33
+ ["say how this closes, before it opens", "DECIDE"],  // trained, ep 53
+ ["ask the ones who did not vote if they can move on", "DECIDE"],  // trained, ep 45
+ ["run the vote you already know the answer to", "DECIDE"],  // shadow, ep 45
+ ["let the loudest preference stand as the group's", "DECIDE"],  // shadow, ep 15
+ ["allow exactly one change, and hold that line", "DECIDE"],  // trained, ep 33
+ ["say which hat you are wearing, out loud", "LEAD"],  // trained, ep 7
+ ["leave the room for ten minutes", "LEAD"],  // trained, ep 43
+ ["answer the question that was asked to the group", "LEAD"],  // shadow, ep 12
+ ["fill the pause with your own voice, again", "LEAD"],  // shadow, ep 12
+ ["ask them to show you, not tell you", "CHALLENGE"],  // trained, ep 12
+ ["make it a team task the moment one person is exposed", "CHALLENGE"],  // trained, ep 12
+ ["point at the arithmetic and let them read it", "CHALLENGE"],  // trained, ep 53
+ ["soften the question until it asks nothing", "CHALLENGE"],  // shadow, ep 12
+ ["ask what makes them sure, knowing they are wrong", "CHALLENGE"],  // shadow
+ ["tell them what they should have learned", "FRAME"],  // shadow, ep 35
+ ["say the debrief question before the game starts", "FRAME"],  // trained, ep 14
+ ["model the strangest version yourself, first", "ENCOURAGE"],  // trained, ep 49
+ ["take the break you need before deciding what is next", "ADAPT"],  // trained, ep 3
+ ["let it fail completely, then stop", "HOLD"],  // trained, ep 16
+ ["ask what stayed with them, before asking about the topic", "DISCOVER"],  // trained, ep 27
 ];
 
 /* CARD 3 - the impact. Reads after "trace the impact on ...".
@@ -361,14 +366,39 @@ const IMPACT = [
  "what you write down afterwards, and what you leave out"                    // you, hands
 ];
 
+
+/* One muscle per hidden route: /hold, /lead, /frame and so on, or ?muscle=hold.
+   Anything else serves the full decks. */
+const DEFINITIONS = {
+ "SENSE": "update a shared situational picture by scanning for weak signals and naming patterns neutrally",
+ "DECIDE": "select an intervention and a closure rule participants accept as legitimate",
+ "FRAME": "create shared meaning; link play signals to practice signals with minimal steering",
+ "SUPPORT": "provide scaffolds, then fade them to preserve agency",
+ "ENCOURAGE": "increase agency and willingness to take interpersonal and task risk",
+ "DISCOVER": "go wider, surfacing perspectives, options and feelings",
+ "CHALLENGE": "create productive struggle and request evidence with care",
+ "HOLD": "maintain psychological and emotional safety boundaries so people can take interpersonal risk",
+ "ANTICIPATE": "project likely next states and pre-empt failure modes without over-steering",
+ "LEAD": "take responsibility for purpose, pacing and boundaries; protect airtime",
+ "ADAPT": "change process in the moment while protecting purpose and safety"
+};
+function chosenMuscle(){
+  const fromPath = location.pathname.split("/").filter(Boolean).pop() || "";
+  const fromQuery = new URLSearchParams(location.search).get("muscle") || "";
+  const name = (fromQuery || fromPath).toUpperCase();
+  return DEFINITIONS[name] ? name : null;
+}
+const MUSCLE = chosenMuscle();
+const only = deck => MUSCLE ? deck.filter(card => card[1] === MUSCLE) : deck;
+
 const $ = s => document.querySelector(s);
 
 /* One row per deck: the cards, the box you edit, the slot it fills in the sentence,
    and its DRAW button. Adding a fourth deck means adding a row. */
 const DECKS = [
- [GROUP,  "#txtG", "#sg", "#rollG"],
- [FACIL,  "#txtF", "#sf", "#rollF"],
- [IMPACT, "#txtI", "#si", "#rollI"]
+ [only(GROUP),  "#txtG", "#sg", "#rollG"],
+ [only(FACIL),  "#txtF", "#sf", "#rollF"],
+ [IMPACT,        "#txtI", "#si", "#rollI"]
 ].map(([deck, txt, slot, btn]) => ({
   deck, last: -1,
   input: $(txt), out: $(slot), btn: $(btn), card: $(txt).closest(".card")
@@ -385,7 +415,7 @@ function drawOne(d){
   let x;
   do { x = Math.floor(Math.random() * d.deck.length); } while(x === d.last && d.deck.length > 1);
   d.last = x;
-  d.input.value = d.deck[x];
+  d.input.value = Array.isArray(d.deck[x]) ? d.deck[x][0] : d.deck[x];
   replay(d.card, "dealt");
 }
 function render(){
@@ -420,6 +450,16 @@ document.addEventListener("keydown", e => {
 
 $("#hudDecks").textContent = DECKS.map(d => d.deck.length).join("\u00d7");
 $("#hudCombos").textContent = DECKS.reduce((n, d) => n * d.deck.length, 1).toLocaleString("en-US");
+
+if(MUSCLE){
+  document.title = "Facilitation Gym Scenario Designer \u2014 " + MUSCLE;
+  $("#hudMuscle").hidden = false;
+  $("#hudMuscleName").textContent = MUSCLE;
+  const note = $("#muscleNote");
+  note.hidden = false;
+  note.innerHTML = "<b>" + MUSCLE + "</b> \u2014 " + DEFINITIONS[MUSCLE] +
+    ". Only cards trained on this muscle are in the decks.";
+}
 
 deal(DECKS);
 </script>

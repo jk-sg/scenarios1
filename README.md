@@ -33,6 +33,18 @@ The impact deck crosses two subjects, the group and you, with three channels:
 One self-contained HTML file, no build step and no dependencies beyond two Google fonts. Open
 `index.html` in a browser, or serve the folder with any static host.
 
+## One muscle at a time
+
+Unlisted per-muscle routes narrow both behaviour decks to a single facilitation muscle and print
+its definition at the top. The impact deck stays whole, because the question you trace is not
+muscle-specific.
+
+    /hold        /sense       /decide      /frame       /support     /encourage
+    /discover    /challenge   /anticipate  /lead        /adapt
+
+`/hold` gives 5 group behaviours × 5 facilitator moves × 30 impacts = 750 hands. Nothing on the
+site links to these; they are for training one muscle deliberately.
+
 ## Credits
 
 Built by [Julian Kea](https://www.kilearning.net), [ki]Learning, Berlin. The arcade form is
